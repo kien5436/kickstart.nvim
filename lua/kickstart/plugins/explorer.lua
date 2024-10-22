@@ -7,5 +7,11 @@ return {
   },
   config = function()
     require('nvim-tree').setup {}
+
+    local function opts(desc)
+      return { desc = 'nvim-tree: ' .. desc, noremap = true, silent = true, nowait = true }
+    end
+
+    vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', opts 'Toggle file [e]xplorer')
   end,
 }
