@@ -34,6 +34,8 @@ return {
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'luckasRanarison/tailwind-tools.nvim',
+      'onsails/lspkind-nvim',
     },
     config = function()
       -- See `:help cmp`
@@ -87,14 +89,22 @@ return {
           --
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
+            else
+              fallback()
             end
           end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
+            else
+              fallback()
             end
           end, { 'i', 's' }),
 
@@ -110,6 +120,18 @@ return {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+        },
+      }
+    end,
+    opts = function()
+      return {
+        formatting = {
+          format = require('lspkind').cmp_format {
+            before = require('tailwind-tools.cmp').lspkind_format,
+            mode = 'symbol',
+            show_labelDetails = true,
+            preset = 'default',
+          },
         },
       }
     end,

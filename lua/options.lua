@@ -1,7 +1,16 @@
+-- fold: https://www.jackfranklin.co.uk/blog/code-folding-in-vim-neovim/
+
 vim.opt.autoindent = true
 vim.opt.breakindent = true
 vim.opt.cursorline = true
 vim.opt.expandtab = true
+vim.opt.foldcolumn = '0'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldlevel = 99 -- fold all by default: 1
+vim.opt.foldlevelstart = 1 -- top level folds are opened
+vim.opt.foldmethod = 'expr'
+vim.opt.foldnestmax = 20
+vim.opt.foldtext = ''
 vim.opt.ignorecase = true
 vim.opt.inccommand = 'split'
 vim.opt.list = true

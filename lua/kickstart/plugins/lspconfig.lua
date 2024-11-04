@@ -167,10 +167,20 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        rust_analyzer = {},
+        rust_analyzer = {
+          settings = {
+            ['rust-analyzer'] = {
+              cargo = {
+                buildScripts = {
+                  enable = false,
+                },
+              },
+              checkOnSave = {
+                command = 'clippy',
+              },
+            },
+          },
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -192,7 +202,26 @@ return {
             },
           },
         },
-        emmet_language_server = {},
+        emmet_language_server = {
+          filetypes = { 'typescript', 'css', 'html', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        },
+        eslint = {
+          settings = {
+            -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+            workingDirectory = { mode = 'auto' },
+          },
+          on_attach = function(client, bufnr)
+            client.server_capabilities.documentFormattingProvider = true
+            client.server_capabilities.documentRangeFormattingProvider = true
+
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = bufnr,
+              command = 'EslintFixAll',
+            })
+          end,
+        },
+        prismals = {},
+        -- tailwindcss = {},
       }
 
       -- Ensure the servers and tools above are installed

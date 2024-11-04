@@ -30,6 +30,7 @@ require('lazy').setup({
   require 'kickstart.plugins.lspconfig',
   require 'kickstart.plugins.onedarkpro',
   require 'kickstart.plugins.statusline',
+  require 'kickstart.plugins.tailwind-tools',
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
