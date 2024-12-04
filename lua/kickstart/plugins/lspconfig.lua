@@ -222,7 +222,19 @@ return {
         },
         prismals = {},
         angularls = {},
-        tailwindcss = {},
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  { 'styleClass\\s*[:=]\\s*["\']([^"\']+)["\']', 'styleClass' },
+                },
+              },
+            },
+          },
+        },
+        html = {},
+        cssls = {},
       }
 
       -- Ensure the servers and tools above are installed
