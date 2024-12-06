@@ -8,5 +8,13 @@ return {
     'nvim-telescope/telescope.nvim', -- optional
     'neovim/nvim-lspconfig', -- optional
   },
-  opts = {}, -- your configuration
+  opts = {
+    -- This plugin overrides server settings by default so you should define your config here than in `lspconfig.lua`
+    server = {
+      settings = {
+        classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'styleClass' },
+        includeLanguages = {},
+      },
+    },
+  }, -- your configuration
 }
