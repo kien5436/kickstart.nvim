@@ -1,11 +1,3 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
@@ -22,6 +14,12 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
+    'mxsdev/nvim-dap-vscode-js',
+    {
+      'microsoft/vscode-js-debug',
+      version = '1.x',
+      build = 'npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out',
+    },
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -93,16 +91,29 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        -- 'delve',
       },
     }
+
+    -- Javascript debugger
+    require('dap-vscode-js').setup {
+      debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug',
+      adapters = { 'pwa-node' },
+    }
+
+    local languages = { 'javascript', 'typescript' }
+
+    for _, language in ipairs(languages) do
+      local ok, configs = pcall(require, 'kickstart.debuggers.' .. language)
+      if ok then
+        require('dap').configurations[language] = configs
+      else
+        vim.notify('Failed to load debug configuration for ' .. language, vim.log.levels.ERROR)
+      end
+    end
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
-      -- Set icons to characters that are more likely to work in every terminal.
-      --    Feel free to remove or use ones that you like more! :)
-      --    Don't feel like these are good choices.
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
       controls = {
         icons = {
