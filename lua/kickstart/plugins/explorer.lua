@@ -12,6 +12,6 @@ return {
       return { desc = 'nvim-tree: ' .. desc, noremap = true, silent = true, nowait = true }
     end
 
-    vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', opts 'Toggle file [e]xplorer')
+    vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeFindFileToggle<CR>', opts 'Toggle file [e]xplorer')
   end,
 }
