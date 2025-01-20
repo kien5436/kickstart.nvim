@@ -17,7 +17,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autocompletion',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.conform',
-  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debugger',
   require 'kickstart.plugins.explorer',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
@@ -28,7 +28,6 @@ require('lazy').setup({
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
-  -- require 'kickstart.plugins.java.java',
   require 'kickstart.plugins.autotag',
   require 'kickstart.plugins.github-copilot',
   -- modular approach: using `require 'path/name'` will
