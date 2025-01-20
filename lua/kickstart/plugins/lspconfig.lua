@@ -28,6 +28,7 @@ return {
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
+      'nvim-java/nvim-java',
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -228,6 +229,20 @@ return {
         tailwindcss = {},
         html = {},
         cssls = {},
+        jdtls = {
+          settings = {
+            java = {
+              configuration = {
+                runtimes = {
+                  {
+                    name = 'openjdk-17',
+                    path = '/opt/homebrew/Cellar/openjdk@17/17.0.13/',
+                  },
+                },
+              },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -237,6 +252,11 @@ return {
       --
       --  You can press `g?` for help in this menu.
       require('mason').setup()
+
+      require('java').setup {
+        spring_boot_tools = { enable = false },
+        jdk = { auto_install = false },
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
