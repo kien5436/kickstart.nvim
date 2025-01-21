@@ -27,7 +27,7 @@ return {
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
-      'nvim-java/nvim-java',
+      { 'nvim-java/nvim-java' },
     },
     config = function()
       -- Brief aside: **What is LSP?**
