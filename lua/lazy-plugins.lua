@@ -30,6 +30,8 @@ require('lazy').setup({
   require 'kickstart.plugins.which-key',
   require 'kickstart.plugins.autotag',
   require 'kickstart.plugins.github-copilot',
+
+  require 'custom.plugins.greeting',
   -- modular approach: using `require 'path/name'` will
   -- include a plugin definition from file lua/path/name.lua
 
