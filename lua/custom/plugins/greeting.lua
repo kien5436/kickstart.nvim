@@ -55,9 +55,6 @@ return {
         api.nvim_buf_set_lines(buf, 0, -1, false, centered_greeting)
         vim.opt_local.modifiable = false
         vim.opt_local.filetype = 'greeting'
-        vim.wo.wrap = false
-        vim.wo.number = false
-        vim.wo.relativenumber = false
       end
 
       center_greeting()
