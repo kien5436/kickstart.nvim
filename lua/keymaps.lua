@@ -31,6 +31,7 @@ vim.keymap.set('n', '<C-Up>', ':resize -1<CR>', { desc = "Decrease window's heig
 vim.keymap.set('i', '<S-Tab>', '<BS>', { noremap = true })
 vim.keymap.set('n', '<C-s>', ':write<CR>', { desc = 'Write to file' })
 vim.keymap.set('n', '<A-z>', ':set wrap!<CR>', { desc = 'Toggle word wrap', noremap = true, silent = true })
+vim.keymap.set('n', '<C-a>', 'gg0VG', { desc = 'Select all', noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
