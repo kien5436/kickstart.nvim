@@ -6,7 +6,7 @@
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list', noremap = true })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -31,7 +31,7 @@ vim.keymap.set('n', '<C-Up>', ':resize -1<CR>', { desc = "Decrease window's heig
 vim.keymap.set('i', '<S-Tab>', '<BS>', { noremap = true })
 vim.keymap.set('n', '<C-s>', ':write<CR>', { desc = 'Write to file' })
 vim.keymap.set('n', '<A-z>', ':set wrap!<CR>', { desc = 'Toggle word wrap', noremap = true, silent = true })
-vim.keymap.set('n', '<C-a>', 'gg0VG', { desc = 'Select all', noremap = true, silent = true })
+vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all', noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
