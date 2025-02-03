@@ -29,8 +29,8 @@ require('lazy').setup({
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
   require 'kickstart.plugins.autotag',
-  require 'kickstart.plugins.github-copilot',
   require 'kickstart.plugins.comment',
+  require 'kickstart.plugins.codeium',
 
   require 'custom.plugins.greeting',
   -- modular approach: using `require 'path/name'` will
