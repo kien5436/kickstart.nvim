@@ -121,14 +121,10 @@ return {
           { name = 'luasnip' },
           { name = 'path' },
         },
-      }
-    end,
-    opts = function()
-      return {
         formatting = {
           format = require('lspkind').cmp_format {
             before = require('tailwind-tools.cmp').lspkind_format,
-            mode = 'symbol',
+            mode = 'symbol_text',
             show_labelDetails = true,
             preset = 'default',
           },
