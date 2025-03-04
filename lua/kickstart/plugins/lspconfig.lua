@@ -166,6 +166,7 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      local pnpm_root = vim.fn.systemlist('pnpm root -g')[1]
       local servers = {
         rust_analyzer = {
           settings = {
@@ -187,7 +188,20 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {},
+        ts_ls = {
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+          init_options = {
+            plugins = {
+              {
+                -- volar requires @vue/typescript-plugin to work. Here I use pnpm to install it.
+                -- IMPORTANT: It is crucial to ensure that @vue/typescript-plugin and volar are of identical versions
+                name = '@vue/typescript-plugin',
+                location = pnpm_root .. '/@vue/typescript-plugin',
+                languages = { 'javascript', 'typescript', 'vue' },
+              },
+            },
+          },
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -242,6 +256,7 @@ return {
             },
           },
         },
+        volar = {},
       }
 
       -- Ensure the servers and tools above are installed
