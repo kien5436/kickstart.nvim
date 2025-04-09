@@ -22,6 +22,7 @@ return {
       javascript = true,
       css = true,
       json = true,
+      java = true,
     }
   end,
 }

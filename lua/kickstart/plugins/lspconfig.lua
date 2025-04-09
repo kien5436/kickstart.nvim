@@ -91,11 +91,11 @@ return {
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          -- map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
 
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          -- map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
@@ -167,6 +167,13 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local pnpm_root = vim.fn.systemlist('pnpm root -g')[1]
+      local java_paths = {}
+
+      if 1 == vim.fn.has 'mac' then
+        java_paths['17'] = '/opt/homebrew/Cellar/openjdk@17/17.0.14/'
+        java_paths['21'] = '/opt/homebrew/Cellar/openjdk@21/21.0.6/'
+      end
+
       local servers = {
         rust_analyzer = {
           settings = {
@@ -249,7 +256,12 @@ return {
                 runtimes = {
                   {
                     name = 'openjdk-17',
-                    path = '/opt/homebrew/Cellar/openjdk@17/17.0.13/',
+                    path = java_paths['17'],
+                    default = true,
+                  },
+                  {
+                    name = 'openjdk-21',
+                    path = java_paths['21'],
                   },
                 },
               },
@@ -269,12 +281,6 @@ return {
       -- `mason` had to be setup earlier: to configure its options see the
       -- `dependencies` table for `nvim-lspconfig` above.
       --
-
-      require('java').setup {
-        spring_boot_tools = { enable = false },
-        jdk = { auto_install = false },
-      }
-
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
@@ -292,6 +298,14 @@ return {
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
+
+            if 'jdtls' == server_name then
+              require('java').setup {
+                spring_boot_tools = { enable = true, version = '1.55.1' },
+                jdk = { auto_install = false },
+              }
+            end
+
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
