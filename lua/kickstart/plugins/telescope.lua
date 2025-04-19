@@ -53,6 +53,14 @@ return {
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       local actions = require 'telescope.actions'
+      local telescopeConfig = require 'telescope.config'
+      -- Clone the default Telescope configuration
+      local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+      -- I want to search in hidden/dot files.
+      table.insert(vimgrep_arguments, '--hidden')
+      -- I don't want to search in the `.git` directory.
+      table.insert(vimgrep_arguments, '--glob')
+      table.insert(vimgrep_arguments, '!**/.git/*')
 
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
@@ -63,8 +71,13 @@ return {
             i = { ['<c-d>'] = actions.delete_buffer },
             n = { ['<c-d>'] = actions.delete_buffer },
           },
+          vimgrep_arguments = vimgrep_arguments,
         },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
