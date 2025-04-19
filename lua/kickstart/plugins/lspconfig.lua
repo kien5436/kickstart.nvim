@@ -170,8 +170,8 @@ return {
       local java_paths = {}
 
       if 1 == vim.fn.has 'mac' then
-        java_paths['17'] = '/opt/homebrew/Cellar/openjdk@17/17.0.14/'
-        java_paths['21'] = '/opt/homebrew/Cellar/openjdk@21/21.0.6/'
+        java_paths['17'] = '/opt/homebrew/Cellar/openjdk@17/17.0.14/libexec/openjdk.jdk/Contents/Home/'
+        java_paths['21'] = '/opt/homebrew/Cellar/openjdk@21/21.0.6/libexec/openjdk.jdk/Contents/Home/'
       end
 
       local servers = {
