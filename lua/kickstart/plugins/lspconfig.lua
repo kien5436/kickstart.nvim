@@ -99,6 +99,9 @@ return {
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('gra', vim.lsp.buf.code_action, 'Code [A]ction', { 'n', 'x' })
+          -- Rename the variable under your cursor.
+          --  Most Language Servers support renaming across files, etc.
+          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 
@@ -164,6 +167,9 @@ return {
       if 1 == vim.fn.has 'mac' then
         java_paths['17'] = '/opt/homebrew/Cellar/openjdk@17/17.0.14/libexec/openjdk.jdk/Contents/Home/'
         java_paths['21'] = '/opt/homebrew/Cellar/openjdk@21/21.0.6/libexec/openjdk.jdk/Contents/Home/'
+      elseif 1 == vim.fn.has 'wsl' then
+        java_paths['17'] = '/usr/lib/jvm/java-17-openjdk-amd64/'
+        java_paths['21'] = '/usr/lib/jvm/java-21-openjdk-amd64/'
       end
 
       local servers = {
