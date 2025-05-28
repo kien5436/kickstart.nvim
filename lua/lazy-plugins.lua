@@ -31,6 +31,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autotag',
   require 'kickstart.plugins.comment',
   require 'kickstart.plugins.codeium',
+  require 'kickstart.plugins.todo-comments',
 
   require 'custom.plugins.greeting',
   -- modular approach: using `require 'path/name'` will
