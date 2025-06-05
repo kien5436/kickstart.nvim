@@ -34,6 +34,10 @@ return {
         ' ########  ###    ### ########## ###    ### ########## ########   ########  ###    ###',
         '',
         string.format('NVIM v%d.%d.%d', ver.major, ver.minor, ver.patch),
+        '',
+        ' 󰈙 New buffer     e',
+        '\u{f017} Recent files   r',
+        '\u{f011} Quit           q',
       }
 
       local function center_greeting()
@@ -63,6 +67,7 @@ return {
         ['n'] = {
           ['e'] = ':enew<CR>',
           ['q'] = ':qa<CR>',
+          ['r'] = ':Telescope oldfiles<CR>',
         },
       }
 
@@ -76,6 +81,7 @@ return {
 
       api.nvim_create_autocmd('VimResized', {
         group = group,
+        buffer = buf,
         callback = center_greeting,
       })
     end
