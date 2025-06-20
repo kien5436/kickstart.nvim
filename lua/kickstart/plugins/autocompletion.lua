@@ -23,6 +23,7 @@ return {
       'folke/lazydev.nvim',
       'luckasRanarison/tailwind-tools.nvim',
       'onsails/lspkind-nvim',
+      'Exafunction/codeium.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -81,9 +82,10 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'codeium' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
         },
       },
 
