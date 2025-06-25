@@ -47,13 +47,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
-
-if vim.fn.has 'wsl' == 1 then
-  vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = "Put yanked text to Windows's clipboard",
-    group = vim.api.nvim_create_augroup('wsl-yank', { clear = true }),
-    callback = function()
-      vim.fn.system('clip.exe', vim.fn.getreg '"')
-    end,
-  })
-end
