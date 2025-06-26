@@ -1,7 +1,6 @@
 -- tailwind-tools.lua
 return {
   'luckasRanarison/tailwind-tools.nvim',
-  lazy = true,
   name = 'tailwind-tools',
   build = ':UpdateRemotePlugins',
   dependencies = {
@@ -15,6 +14,11 @@ return {
       settings = {
         classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'styleClass' },
         includeLanguages = {},
+      },
+    },
+    keymaps = {
+      smart_increment = {
+        enabled = false,
       },
     },
   }, -- your configuration
