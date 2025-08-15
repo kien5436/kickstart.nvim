@@ -42,6 +42,8 @@ return {
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
         html = { 'prettierd' },
         css = { 'prettierd' },
+        xml = { 'xmlformat' },
+        xslt = { 'xmlformat' },
       },
     },
   },
