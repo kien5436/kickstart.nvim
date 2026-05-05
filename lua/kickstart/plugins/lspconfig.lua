@@ -161,20 +161,20 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {
-          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-          init_options = {
-            plugins = {
-              {
-                -- volar requires @vue/typescript-plugin to work. Here I use pnpm to install it.
-                -- IMPORTANT: It is crucial to ensure that @vue/typescript-plugin and volar are of identical versions
-                name = '@vue/typescript-plugin',
-                location = pnpm_root .. '/@vue/typescript-plugin',
-                languages = { 'javascript', 'typescript', 'vue' },
-              },
-            },
-          },
-        },
+        -- ts_ls = {
+        --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        --   init_options = {
+        --     plugins = {
+        --       {
+        --         -- volar requires @vue/typescript-plugin to work. Here I use pnpm to install it.
+        --         -- IMPORTANT: It is crucial to ensure that @vue/typescript-plugin and volar are of identical versions
+        --         name = '@vue/typescript-plugin',
+        --         location = pnpm_root .. '/@vue/typescript-plugin',
+        --         languages = { 'javascript', 'typescript', 'vue' },
+        --       },
+        --     },
+        --   },
+        -- },
         emmet_language_server = {
           filetypes = { 'typescript', 'css', 'html', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
@@ -196,11 +196,44 @@ return {
             })
           end,
         },
-        angularls = {},
-        tailwindcss = {},
+        -- angularls = {},
+        -- tailwindcss = {},
         html = {},
         cssls = {},
-        vue_ls = {},
+        -- vue_ls = {},
+        -- stylua = {},
+        lua_ls = {
+          on_init = function(client)
+            if client.workspace_folders then
+              local path = client.workspace_folders[1].name
+              if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+                return
+              end
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+              runtime = {
+                version = 'LuaJIT',
+                path = {
+                  'lua/?.lua',
+                  'lua/?/init.lua',
+                },
+              },
+              workspace = {
+                checkThirdParty = false,
+              },
+            })
+          end,
+          settings = {
+            Lua = {
+              completion = {
+                callSnippet = 'Replace',
+              },
+              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -225,40 +258,6 @@ return {
         vim.lsp.config(name, server)
         vim.lsp.enable(name)
       end
-
-      vim.lsp.config('lua_ls', {
-        on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
-              return
-            end
-          end
-
-          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-              version = 'LuaJIT',
-              path = {
-                'lua/?.lua',
-                'lua/?/init.lua',
-              },
-            },
-            workspace = {
-              checkThirdParty = false,
-            },
-          })
-        end,
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
-          },
-        },
-      })
-      vim.lsp.enable 'lua_ls'
     end,
   },
 }
