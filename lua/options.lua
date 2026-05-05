@@ -14,7 +14,6 @@ vim.o.foldtext = ''
 vim.o.ignorecase = true
 vim.o.inccommand = 'split'
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.mouse = 'a'
 vim.o.number = true
 vim.o.scrolloff = 10
@@ -30,6 +29,8 @@ vim.o.tabstop = 2
 vim.o.timeoutlen = 300
 vim.o.undofile = true
 vim.o.updatetime = 250
+vim.o.winborder = 'rounded'
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
