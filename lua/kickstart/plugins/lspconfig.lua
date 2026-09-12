@@ -175,6 +175,22 @@ return {
         --     },
         --   },
         -- },
+        -- `ts_ls` had been the long-standing choice for typescript, but `tsc` is supported directly from TS 7, it's worth to try
+        tsc = {},
+        lua_ls = {
+          -- cmd = {...},
+          -- filetypes = { ...},
+          -- capabilities = {},
+          settings = {
+            Lua = {
+              completion = {
+                callSnippet = 'Replace',
+              },
+              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
         emmet_language_server = {
           filetypes = { 'typescript', 'css', 'html', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
