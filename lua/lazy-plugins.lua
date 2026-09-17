@@ -33,7 +33,7 @@ require('lazy').setup({
   require 'kickstart.plugins.todo-comments',
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
-  require 'kickstart.plugins.typescript-tools',
+  -- require 'kickstart.plugins.typescript-tools',
 
   require 'custom.plugins.greeting',
   -- modular approach: using `require 'path/name'` will

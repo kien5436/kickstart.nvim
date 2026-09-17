@@ -6,8 +6,9 @@ return {
   },
   config = function()
     require('codeium').setup {
+      enable_cmp_source = false, -- disable legacy `nvim-cmp`
       virtual_text = {
-        enabled = true,
+        enabled = false,
       },
       default_filetype_enabled = true,
       filetypes = {

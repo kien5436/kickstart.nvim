@@ -1,6 +1,10 @@
 return {
   'windwp/nvim-ts-autotag',
   lazy = true,
+  event = {
+    'BufReadPre',
+    'BufNewFile',
+  },
   opts = {
     enable_close = true,
     enable_rename = true,

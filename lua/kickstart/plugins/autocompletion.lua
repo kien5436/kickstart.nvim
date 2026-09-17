@@ -23,7 +23,7 @@ return {
       'folke/lazydev.nvim',
       'luckasRanarison/tailwind-tools.nvim',
       'onsails/lspkind-nvim',
-      'Exafunction/codeium.nvim',
+      'Exafunction/windsurf.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -69,6 +69,7 @@ return {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         menu = { border = 'rounded' },
+        ghost_text = { enabled = true },
         documentation = {
           auto_show = true,
           auto_show_delay_ms = 500,
