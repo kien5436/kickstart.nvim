@@ -2,9 +2,9 @@ return {
   name = 'greeting',
   dir = vim.fn.stdpath 'config' .. '/lua/custom/plugins',
   lazy = false,
-  priority = 1000,
+  priority = 999,
   dev = true,
-  event = 'VimEnter',
+  -- event = 'VimEnter',
   config = function()
     local api = vim.api
     local group = api.nvim_create_augroup('CustomGreeter', { clear = true })

@@ -1,6 +1,6 @@
 -- tailwind-tools.lua
 return {
-  'luckasRanarison/tailwind-tools.nvim',
+  'kien5436/tailwind-tools.nvim',
   name = 'tailwind-tools',
   build = ':UpdateRemotePlugins',
   dependencies = {

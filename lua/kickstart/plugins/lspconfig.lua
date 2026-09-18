@@ -24,7 +24,7 @@ return {
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
-      { 'nvim-java/nvim-java' },
+      -- { 'nvim-java/nvim-java' },
     },
     config = function()
       -- Brief aside: **What is LSP?**

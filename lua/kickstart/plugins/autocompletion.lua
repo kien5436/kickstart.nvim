@@ -21,7 +21,6 @@ return {
         opts = {},
       },
       'folke/lazydev.nvim',
-      'luckasRanarison/tailwind-tools.nvim',
       'onsails/lspkind-nvim',
       'Exafunction/windsurf.nvim',
     },
