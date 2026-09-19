@@ -5,9 +5,22 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
-      -- lint.linters_by_ft = {
-      -- markdown = { 'markdownlint' },
-      -- }
+      lint.linters_by_ft = {
+        lua = { 'selene' },
+        bash = { 'shellcheck' },
+        sh = { 'shellcheck' },
+        html = { 'htmlhint', 'markuplint' },
+        css = { 'stylelint' },
+        javascript = { 'biomejs', 'eslint_d', 'oxlint' },
+        typescript = { 'biomejs', 'eslint_d', 'oxlint' },
+        javascriptreact = { 'biomejs', 'eslint_d', 'oxlint' },
+        typescriptreact = { 'biomejs', 'eslint_d', 'oxlint' },
+        json = { 'biomejs', 'jsonlint' },
+        jsonc = { 'biomejs', 'jsonlint' },
+        json5 = { 'biomejs' },
+        markdown = { 'markdownlint-cli2', 'vale' },
+        text = { 'vale', 'codespell' },
+      }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
