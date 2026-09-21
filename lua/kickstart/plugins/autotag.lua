@@ -6,8 +6,10 @@ return {
     'BufNewFile',
   },
   opts = {
-    enable_close = true,
-    enable_rename = true,
-    enable_close_on_slash = false,
+    opts = {
+      enable_close = true,
+      enable_rename = true,
+      enable_close_on_slash = false,
+    },
   },
 }
