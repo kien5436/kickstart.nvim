@@ -18,8 +18,6 @@ return {
         json = { 'biomejs', 'jsonlint' },
         jsonc = { 'biomejs', 'jsonlint' },
         json5 = { 'biomejs' },
-        markdown = { 'markdownlint-cli2', 'vale' },
-        text = { 'vale', 'codespell' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

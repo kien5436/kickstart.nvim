@@ -262,9 +262,6 @@ return {
         'eslint_d',
         'oxlint',
         'jsonlint',
-        'markdownlint-cli2',
-        'vale',
-        'codespell',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
