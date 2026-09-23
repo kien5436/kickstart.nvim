@@ -33,6 +33,7 @@ require('lazy').setup({
   require 'kickstart.plugins.todo-comments',
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
+  require 'kickstart.plugins.bufremove',
   -- require 'kickstart.plugins.typescript-tools',
 
   require 'custom.plugins.greeting',
