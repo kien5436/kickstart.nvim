@@ -15,6 +15,7 @@ return {
         typescript = { 'biomejs', 'eslint_d', 'oxlint' },
         javascriptreact = { 'biomejs', 'eslint_d', 'oxlint' },
         typescriptreact = { 'biomejs', 'eslint_d', 'oxlint' },
+        vue = { 'eslint_d' },
         json = { 'biomejs', 'jsonlint' },
         jsonc = { 'biomejs', 'jsonlint' },
         json5 = { 'biomejs' },

@@ -23,7 +23,15 @@ return {
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          notification = {
+            override_vim_notify = true,
+            window = { winblend = 0, border = 'rounded' },
+          },
+        },
+      },
       -- { 'nvim-java/nvim-java' },
     },
     config = function()
@@ -140,6 +148,21 @@ return {
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
+
+          -- ESLint: auto-fix on save via the `LspEslintFixAll` buffer command
+          -- created by nvim-lspconfig's default eslint `on_attach`.
+          -- NOTE: keep this here (not in the `eslint` server entry's own
+          -- `on_attach`) — a custom `on_attach` there would replace the
+          -- default one and the command would never be created.
+          if client and client.name == 'eslint' then
+            client.server_capabilities.documentFormattingProvider = true
+            client.server_capabilities.documentRangeFormattingProvider = true
+
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = event.buf,
+              command = 'LspEslintFixAll',
+            })
+          end
         end,
       })
 
@@ -152,31 +175,49 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      -- local pnpm_root = vim.fn.systemlist('pnpm root -g')[1]
+
+      -- Vue 3 (hybrid mode): `vue_ls` serves template/style blocks, `vtsls`
+      -- with `@vue/typescript-plugin` serves script blocks (including TS).
+      -- NOTE: `tsc` (TS 7 native LSP) cannot do hybrid mode — `vue_ls` only
+      -- forwards to `ts_ls`/`vtsls`/`typescript-tools` — so `vtsls` replaces
+      -- `tsc` here. To revert, swap `vtsls` back to `tsc = {}`.
+      -- Plugin location resolves from the Mason-installed vue-language-server.
+      local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+      local vue_plugin = {
+        name = '@vue/typescript-plugin',
+        location = vue_language_server_path,
+        languages = { 'vue' },
+        configNamespace = 'typescript',
+      }
 
       local servers = {
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {
-        --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-        --   init_options = {
-        --     plugins = {
-        --       {
-        --         -- volar requires @vue/typescript-plugin to work. Here I use pnpm to install it.
-        --         -- IMPORTANT: It is crucial to ensure that @vue/typescript-plugin and volar are of identical versions
-        --         name = '@vue/typescript-plugin',
-        --         location = pnpm_root .. '/@vue/typescript-plugin',
-        --         languages = { 'javascript', 'typescript', 'vue' },
-        --       },
-        --     },
-        --   },
-        -- },
-        -- `ts_ls` had been the long-standing choice for typescript, but `tsc` is supported directly from TS 7, it's worth to try
-        tsc = {},
+        vtsls = {
+          settings = {
+            vtsls = {
+              tsserver = {
+                globalPlugins = { vue_plugin },
+              },
+            },
+          },
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        },
+        vue_ls = {
+          -- @vue/language-server 2.x crashes on `initialize` without `initializationOptions.typescript` (it reads `.typescript` of undefined). Send the TS SDK path like the VSCode client does.
+          init_options = {
+            typescript = {
+              tsdk = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib',
+            },
+          },
+          -- Prefer each project's own TypeScript over the bundled one, mirroring how VSCode resolves the workspace TS version.
+          -- NOTE: `on_new_config` (not `on_attach`) so nvim-lspconfig's defaults stay intact.
+          on_new_config = function(new_config, new_root_dir)
+            local project_tsdk = new_root_dir .. '/node_modules/typescript/lib'
+            if vim.fn.isdirectory(project_tsdk) == 1 then
+              new_config.init_options.typescript.tsdk = project_tsdk
+            end
+          end,
+        },
         emmet_language_server = {
           filetypes = { 'typescript', 'css', 'html', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
@@ -188,21 +229,11 @@ return {
             },
             workingDirectory = { mode = 'auto' },
           },
-          on_attach = function(client, bufnr)
-            client.server_capabilities.documentFormattingProvider = true
-            client.server_capabilities.documentRangeFormattingProvider = true
-
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              buffer = bufnr,
-              command = 'EslintFixAll',
-            })
-          end,
         },
         -- angularls = {},
         -- tailwindcss = {},
         html = {},
         cssls = {},
-        -- vue_ls = {},
         -- stylua = {},
         lua_ls = {
           on_init = function(client)
