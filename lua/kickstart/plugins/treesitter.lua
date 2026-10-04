@@ -1,49 +1,48 @@
 return {
-  { -- Highlight, edit, and navigate code
+  {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'java',
-        'vue',
-        'typescript',
-        'javascript',
-        'tsx',
-        'css',
-        'scss',
-        'json',
-        'jsonc',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    config = function()
+      local treesitter = require 'nvim-treesitter'
+      -- The JSON parser also handles JSON with comments.
+      vim.treesitter.language.register('json', 'jsonc')
+      treesitter.setup {}
+
+      local function start(buf)
+        if not vim.api.nvim_buf_is_valid(buf) or not vim.api.nvim_buf_is_loaded(buf) then
+          return
+        end
+        local filetype = vim.bo[buf].filetype
+        local lang = vim.treesitter.language.get_lang(filetype)
+        if not lang or not pcall(vim.treesitter.start, buf, lang) then
+          return
+        end
+        if vim.treesitter.query.get(lang, 'indents') then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+        vim.bo[buf].syntax = ''
+      end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('kickstart-treesitter', { clear = true }),
+        callback = function(event)
+          local lang = vim.treesitter.language.get_lang(vim.bo[event.buf].filetype)
+          if not lang or not vim.tbl_contains(treesitter.get_available(), lang) then
+            return
+          end
+          -- Install missing parsers asynchronously, then highlight the original buffer.
+          treesitter.install({ lang }):await(function(err)
+            if not err then
+              vim.schedule(function()
+                start(event.buf)
+              end)
+            end
+          end)
+        end,
+      })
+    end,
   },
 }
 -- vim: ts=2 sts=2 sw=2 et
