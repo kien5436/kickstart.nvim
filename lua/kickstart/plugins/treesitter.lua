@@ -3,12 +3,18 @@ return {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
     lazy = false,
-    build = ':TSUpdate',
     config = function()
       local treesitter = require 'nvim-treesitter'
       -- The JSON parser also handles JSON with comments.
       vim.treesitter.language.register('json', 'jsonc')
       treesitter.setup {}
+
+      local function has_parser(lang)
+        if pcall(vim.treesitter.language.add, lang) then
+          return true
+        end
+        return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.so', true) > 0
+      end
 
       local function start(buf)
         if not vim.api.nvim_buf_is_valid(buf) or not vim.api.nvim_buf_is_loaded(buf) then
@@ -29,7 +35,16 @@ return {
         group = vim.api.nvim_create_augroup('kickstart-treesitter', { clear = true }),
         callback = function(event)
           local lang = vim.treesitter.language.get_lang(vim.bo[event.buf].filetype)
-          if not lang or not vim.tbl_contains(treesitter.get_available(), lang) then
+          if not lang then
+            return
+          end
+          -- Parser already available (usually Neovim's builtin): start now,
+          -- do not install a shadowing duplicate.
+          if has_parser(lang) then
+            start(event.buf)
+            return
+          end
+          if not vim.tbl_contains(treesitter.get_available(), lang) then
             return
           end
           -- Install missing parsers asynchronously, then highlight the original buffer.

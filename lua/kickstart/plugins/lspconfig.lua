@@ -166,6 +166,14 @@ return {
         end,
       })
 
+      -- Aliases for the legacy nvim-lspconfig commands removed upstream.
+      vim.api.nvim_create_user_command('LspInfo', function()
+        vim.cmd.checkhealth 'vim.lsp'
+      end, { desc = 'Alias: :checkhealth vim.lsp' })
+      vim.api.nvim_create_user_command('LspLog', function()
+        vim.cmd.edit(vim.lsp.log.get_filename())
+      end, { desc = 'Alias: open the LSP log file' })
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -295,6 +303,9 @@ return {
         'jsonlint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+      -- SourceKit ships with Swift and is not available from the Mason registry.
+      servers.sourcekit = {}
 
       for name, server in pairs(servers) do
         vim.lsp.config(name, server)

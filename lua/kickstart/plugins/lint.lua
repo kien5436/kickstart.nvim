@@ -6,7 +6,6 @@ return {
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
-        lua = { 'selene' },
         bash = { 'shellcheck' },
         sh = { 'shellcheck' },
         html = { 'htmlhint', 'markuplint' },
