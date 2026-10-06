@@ -53,6 +53,42 @@ return {
       desc = 'Debug: Step Out',
     },
     {
+      '<F4>',
+      function()
+        require('dap').step_back()
+      end,
+      desc = 'Debug: Step Back',
+    },
+    {
+      '<S-F5>',
+      function()
+        require('dap').terminate()
+      end,
+      desc = 'Debug: Terminate',
+    },
+    {
+      '<C-S-F5>',
+      function()
+        require('dap').run_last()
+      end,
+      desc = 'Debug: Rerun Last',
+    },
+    -- Mirrors for terminals that swallow modified function keys
+    {
+      '<leader>uq',
+      function()
+        require('dap').terminate()
+      end,
+      desc = 'Debug: Terminate',
+    },
+    {
+      '<leader>ul',
+      function()
+        require('dap').run_last()
+      end,
+      desc = 'Debug: Rerun Last',
+    },
+    {
       '<leader>b',
       function()
         require('dap').toggle_breakpoint()
@@ -101,7 +137,19 @@ return {
       adapters = { 'pwa-node' },
     }
 
-    local languages = { 'javascript', 'typescript' }
+    -- Swift debugger (lldb-dap ships with the Swift toolchain, e.g. via swiftly)
+    local lldb_dap = vim.fn.exepath 'lldb-dap'
+    if lldb_dap ~= '' then
+      dap.adapters['lldb-dap'] = {
+        type = 'executable',
+        command = lldb_dap,
+        name = 'lldb-dap',
+      }
+    else
+      vim.notify('lldb-dap not found on PATH; Swift debugging unavailable', vim.log.levels.WARN)
+    end
+
+    local languages = { 'javascript', 'typescript', 'swift' }
 
     for _, language in ipairs(languages) do
       local ok, configs = pcall(require, 'kickstart.debuggers.' .. language)
@@ -118,21 +166,19 @@ return {
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
       controls = {
         icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
+          pause = ' F5',
+          play = ' F5',
+          step_into = ' F1',
+          step_over = ' F2',
+          step_out = ' F3',
+          step_back = ' F4',
+          run_last = ' C-S-F5',
+          terminate = ' S-F5',
+          disconnect = '',
         },
       },
     }
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
   end,
 }
