@@ -1,6 +1,8 @@
 -- Swift debugger configurations for nvim-dap (lldb-dap from Swift toolchain).
 -- Loaded by `lua/kickstart/plugins/debugger.lua` via `kickstart.debuggers.swift`.
--- Requires `lldb-dap` on PATH (ships with Swift, e.g. via swiftly).
+-- Requires `lldb-dap` (ships with the Swift toolchain). The adapter is
+-- registered in `lua/kickstart/plugins/debugger.lua`, resolved via PATH
+-- (e.g. swiftly) or `xcrun --find lldb-dap` (Command Line Tools / Xcode).
 
 local function package_root()
   local path = vim.fn.expand '%:p:h'

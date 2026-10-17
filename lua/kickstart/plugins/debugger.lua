@@ -137,8 +137,18 @@ return {
       adapters = { 'pwa-node' },
     }
 
-    -- Swift debugger (lldb-dap ships with the Swift toolchain, e.g. via swiftly)
+    -- Swift debugger (lldb-dap ships with the Swift toolchain — Command Line
+    -- Tools or Xcode on macOS, or e.g. swiftly if installed)
     local lldb_dap = vim.fn.exepath 'lldb-dap'
+    if lldb_dap == '' and vim.fn.executable 'xcrun' == 1 then
+      -- Not on PATH: ask the active developer directory (CLT or Xcode,
+      -- whichever `xcode-select` points at). xcrun exits non-zero when
+      -- it finds nothing.
+      local found = vim.fn.systemlist { 'xcrun', '--find', 'lldb-dap' }
+      if vim.v.shell_error == 0 and found[1] and vim.fn.executable(found[1]) == 1 then
+        lldb_dap = found[1]
+      end
+    end
     if lldb_dap ~= '' then
       dap.adapters['lldb-dap'] = {
         type = 'executable',
@@ -146,7 +156,7 @@ return {
         name = 'lldb-dap',
       }
     else
-      vim.notify('lldb-dap not found on PATH; Swift debugging unavailable', vim.log.levels.WARN)
+      vim.notify('lldb-dap not found (PATH and xcrun); Swift debugging unavailable', vim.log.levels.WARN)
     end
 
     local languages = { 'javascript', 'typescript', 'swift' }
