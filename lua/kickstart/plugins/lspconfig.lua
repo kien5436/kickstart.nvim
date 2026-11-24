@@ -242,6 +242,9 @@ return {
         -- tailwindcss = {},
         html = {},
         cssls = {},
+        -- Rust: installed from Mason; diagnostics, completions, go-to-definition
+        -- and formatting all come from rust-analyzer.
+        rust_analyzer = {},
         -- stylua = {},
         lua_ls = {
           on_init = function(client)
