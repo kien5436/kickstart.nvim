@@ -163,6 +163,10 @@ return {
               command = 'LspEslintFixAll',
             })
           end
+
+          if vim.lsp.document_color and vim.lsp.document_color.enable then
+            vim.lsp.document_color.enable(true, { bufnr = event.buf }, { style = 'virtual' })
+          end
         end,
       })
 
